@@ -1,9 +1,9 @@
 
-**TM-ABC-MCMC algorithm**
+**TM-RWFS algorithm**
 
 **Overview**
 
-Trajectory-matching ABC-MCMC for simulating heterogeneous dynamics in mechanistic models
+Trajectory-matching RWFS for simulating heterogeneous dynamics in mechanistic models
 
 **Requirements**
 
