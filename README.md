@@ -17,7 +17,7 @@ Trajectory-matching RWFS for simulating heterogeneous dynamics in mechanistic mo
 
 •	Mathematical model (ODEs, DDEs), parameters best fit values
 
-•	TM-ABC-MCMC parameters
+•	TM-RWFS parameters
 
 **Outputs**
 
