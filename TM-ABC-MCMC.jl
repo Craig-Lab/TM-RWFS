@@ -1,6 +1,6 @@
 
 """
-TM-ABC-MCMC with Lotka_Volterra model as an example using synthetic data
+TM-RWFS with Lotka_Volterra model as an example using synthetic data
 Morgan_Craig_Lab
 Programming language : Julia v"1.10.4"
 """
@@ -333,7 +333,7 @@ Number of repeats : M
 ==============================
 =#
 N = 5000
-M = 1  # Use M = 1: the model is simple and converges quickly; repeated runs are unnecessary.
+M = 1  # Use M = 1: the model is simple and repeated runs are unnecessary.
 
 
 
@@ -363,7 +363,7 @@ X_Rej = [[] for _ in 1:M]
 
 #= 
 =================================================================================================================================
-                                                           TM-ABC-MCMC
+                                                           TM-RWFS
 =================================================================================================================================
 =#
 using Dates 
@@ -494,64 +494,3 @@ for i in 1:M
 end
 
 
-
-
-# Convergence diagnostics
-ann_M(i) = attr(
-    text = "M = $(i)",
-    x = 0.98, y = 1.0, xref = "paper", yref = "paper",
-    xanchor = "right", yanchor = "top",
-    showarrow = false,
-    font = attr(family="Arial", size=16),
-    bgcolor = "rgba(255,255,255,0.85)",
-    bordercolor = "#5F747A", borderwidth = 2, borderpad = 3
-)
-
-for (param, label) in zip(param_names, param_labels)
-    for i in 1:M
-        all_unique_param = all_unique_lists[param][i]
-        log_values = all_unique_param
-        num = length(log_values)
-
-        common_layout = Layout(
-            xaxis=attr(showline=true, linecolor="black"),
-            yaxis=attr(showline=true, linecolor="black"),
-            width=600, height=500, font=attr(family="Arial", size=25),
-            showlegend=false, showgrid=false, plot_bgcolor="white",
-            margin=attr(l=10, r=10, t=10, b=10)
-        )
-
-        x_min, x_max = minimum(log_values), maximum(log_values)
-        range_low, range_high = abs(0.1*x_min), abs(0.1*x_max)
-        extended_range = (x_min - range_low, x_max + range_high)
-
-        # Histogram
-        p_hist = plot(
-            histogram(x=log_values, nbinsx=10, marker_color="#525b7a"),
-            merge(common_layout, Layout(
-                xaxis_title=label, yaxis_title="Frequency",
-                xaxis=attr(range=[extended_range[1], extended_range[2]]),
-                annotations=[ann_M(i)]
-            ))
-        )
-        display(p_hist); savefig(p_hist, "$(param)_histogram_iteration_$i.png")
-
-        # Trace
-        p_trace = plot(
-            scatter(x=1:num, y=log_values, mode="lines", line=attr(color="black")),
-            merge(common_layout, Layout(yaxis_title=label, annotations=[ann_M(i)],xaxis_title="Iteration"))
-        )
-        display(p_trace); savefig(p_trace, "$(param)_trace_iteration_$i.png")
-
-        # ACF
-        acf_values = autocor(log_values, 0:num-1)
-        p_acf = plot(
-            [
-                scatter(x=1:num, y=acf_values, mode="lines", line=attr(color="black")),
-                scatter(x=[1, num], y=[0, 0], mode="lines", line=attr(color="black", dash="dash"))
-            ],
-            merge(common_layout, Layout(yaxis_title=label, annotations=[ann_M(i)],xaxis_title="Lag"))
-        )
-        display(p_acf); savefig(p_acf, "ACF_$(param)_iteration_$i.png")
-    end
-end
