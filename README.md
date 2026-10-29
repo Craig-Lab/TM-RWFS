@@ -35,7 +35,7 @@ This repository contains code that reproduces the results for the Lotka–Volter
 
 The archived version of the repository is available on Zenodo:
 
-...
+https://doi.org/10.5281/zenodo.23768581
 
 **Data Sources**
 
